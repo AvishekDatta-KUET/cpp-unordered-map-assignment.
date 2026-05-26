@@ -4,37 +4,31 @@
 
 using namespace std;
 
-int romanToInt(string s) {
-    // Create a static lookup map for Roman numerals
-    unordered_map<char, int> romanMap = {
-        {'I', 1}, {'V', 5}, {'X', 10}, {'L', 50},
-        {'C', 100}, {'D', 500}, {'M', 1000}
-    };
+int firstUniqChar(string s) {
+    // Create an unordered_map to store the frequency of each character
+    unordered_map<char, int> charCounts;
 
-    int total = 0;
-    int n = s.length();
+    // Pass 1: Tally up the characters
+    for (char c : s) {
+        charCounts[c]++;
+    }
 
-    // Loop through the string
-    for (int i = 0; i < n; i++) {
-        // Rule: If current numeral is smaller than the NEXT numeral, subtract it
-        if (i < n - 1 && romanMap[s[i]] < romanMap[s[i+1]]) {
-            total -= romanMap[s[i]];
-        }
-        // Otherwise, just add it to the total
-        else {
-            total += romanMap[s[i]];
+    // Pass 2: Check the string from left to right to find the first '1'
+    for (int i = 0; i < s.length(); i++) {
+        if (charCounts[s[i]] == 1) {
+            return i; // Return the index immediately upon finding it
         }
     }
 
-    return total;
+    return -1; // If no unique character exists
 }
 
 int main() {
-    string roman1 = "XIV";
-    string roman2 = "MCMXCIV";
+    string test1 = "leetcode";
+    string test2 = "loveleetcode";
 
-    cout << roman1 << " in integer is: " << romanToInt(roman1) << endl; // Expected: 14
-    cout << roman2 << " in integer is: " << romanToInt(roman2) << endl; // Expected: 1994
+    cout << "Test 1 ('leetcode'): " << firstUniqChar(test1) << endl; // Expected: 0 ('l')
+    cout << "Test 2 ('loveleetcode'): " << firstUniqChar(test2) << endl; // Expected: 2 ('v')
 
     return 0;
 }
